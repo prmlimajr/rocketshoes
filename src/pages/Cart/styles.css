@@ -1,0 +1,90 @@
+.cart-details {
+  padding: 30px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+}
+
+table thead th {
+  color: #999;
+  text-align: left;
+  padding: 12px;
+}
+
+table tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+table tbody td div {
+  display: flex;
+  align-items: center;
+}
+
+table tbody td input {
+  border: 1px solid #ddd;
+  color: #666;
+  padding: 6px;
+  width: 50px;
+}
+
+table tbody td button {
+  background: none;
+  border: 0;
+  padding: 6px;
+}
+
+table img {
+  height: 100px;
+}
+
+table strong {
+  color: #333;
+  display: block;
+}
+
+table span {
+  display: block;
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+footer {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer button {
+  background: #7159c1;
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: opacity 0.2s;
+}
+
+footer button:hover {
+  opacity: 0.8;
+}
+.total {
+  display: flex;
+  align-items: baseline;
+}
+
+.total span {
+  color: #999;
+  font-weight: bold;
+}
+
+.total strong {
+  font-size: 28px;
+  margin-left: 5px;
+}
