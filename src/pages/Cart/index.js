@@ -1,13 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { formatPrice } from '../../util/format';
 import {
   MdRemoveCircleOutline,
   MdAddCircleOutline,
   MdDelete,
 } from 'react-icons/md';
 
+import * as CartActions from '../../store/modules/cart/action';
+
 import './styles.css';
 
-export default function Cart() {
+function Cart({ cart, dispatch, updateAmount, total }) {
+  function increment(product) {
+    dispatch(CartActions.updateAmount(product.id, product.amount + 1));
+  }
+
+  function decrement(product) {
+    dispatch(CartActions.updateAmount(product.id, product.amount - 1));
+  }
+
   return (
     <div className='cart-details'>
       <table>
@@ -21,37 +34,42 @@ export default function Cart() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <img
-                src='https://static.netshoes.com.br/produtos/tenis-nike-revolution-5-masculino/26/HZM-1731-026/HZM-1731-026_zoom1.jpg?ts=1571078789&'
-                alt='tênis'
-              />
-            </td>
-            <td>
-              <strong>Tênis muito massa</strong>
-              <span>R$129,90</span>
-            </td>
-            <td>
-              <div>
-                <button>
-                  <MdRemoveCircleOutline size={20} color='#7159c1' />
-                </button>
-                <input type='number' readOnly value={2} />
-                <button>
-                  <MdAddCircleOutline size={20} color='#7159c1' />
-                </button>
-              </div>
-            </td>
-            <td>
-              <strong>R$258,80</strong>
-            </td>
-            <td>
-              <button>
-                <MdDelete size={20} color='#7159c1' />
-              </button>
-            </td>
-          </tr>
+          {cart.map((product) => {
+            return (
+              <tr key={product.id}>
+                <td>
+                  <img src={product.image} alt={product.title} />
+                </td>
+                <td>
+                  <strong>{product.title}</strong>
+                  <span>{product.priceFormatted}</span>
+                </td>
+                <td>
+                  <div>
+                    <button onClick={() => decrement(product)}>
+                      <MdRemoveCircleOutline size={20} color='#7159c1' />
+                    </button>
+                    <input type='number' readOnly value={product.amount} />
+                    <button onClick={() => increment(product)}>
+                      <MdAddCircleOutline size={20} color='#7159c1' />
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <strong>{product.subtotal}</strong>
+                </td>
+                <td>
+                  <button
+                    onClick={() =>
+                      dispatch(CartActions.removeFromCart(product.id))
+                    }
+                  >
+                    <MdDelete size={20} color='#7159c1' />
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
@@ -59,9 +77,27 @@ export default function Cart() {
         <button>Finalizar pedido</button>
         <div className='total'>
           <span>TOTAL</span>
-          <strong>R$1920,28</strong>
+          <strong>{total}</strong>
         </div>
       </footer>
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  cart: state.cart.map((product) => ({
+    ...product,
+    subtotal: formatPrice(product.price * product.amount),
+  })),
+  total: formatPrice(
+    state.cart.reduce((total, product) => {
+      return total + product.price * product.amount;
+    }, 0)
+  ),
+});
+
+// const mapDispatchToProps = (dispatch) => {
+//   bindActionCreators(CartActions, dispatch);
+// };
+
+export default connect(mapStateToProps)(Cart);

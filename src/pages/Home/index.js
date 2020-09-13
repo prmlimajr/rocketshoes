@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import * as CartActions from '../../store/modules/cart/action';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { MdAddShoppingCart } from 'react-icons/md';
 import api from '../../services/api';
@@ -22,17 +24,15 @@ class Home extends Component {
     this.setState({ products: data });
   }
 
-  handleAddProduct = (product) => {
+  handleAddProduct = (id) => {
     const { dispatch } = this.props;
 
-    dispatch({
-      type: 'ADD_TO_CART',
-      product,
-    });
+    dispatch(CartActions.addToCartRequest(id));
   };
 
   render() {
     const { products } = this.state;
+    const { amount } = this.props;
 
     return (
       <ul className='product-list'>
@@ -42,9 +42,10 @@ class Home extends Component {
               <img src={product.image} alt={product.title} />
               <strong>{product.title}</strong>
               <span className='price'>{product.priceFormatted}</span>
-              <button onClick={() => this.handleAddProduct(product)}>
+              <button onClick={() => this.handleAddProduct(product.id)}>
                 <div>
-                  <MdAddShoppingCart size={16} color='#fff' />
+                  <MdAddShoppingCart size={16} color='#fff' />{' '}
+                  {/* {amount[product.id] || 0} */}
                 </div>
                 <span className='btn-text'>Adicionar ao carrinho</span>
               </button>
@@ -55,5 +56,14 @@ class Home extends Component {
     );
   }
 }
+
+// const mapStateToProps = (state) => ({
+//   amount: state.cart.reduce((amount, product) => {
+//     return (amount[product.id] = product.amount);
+//   }, {}),
+// });
+// const mapDispatchToProps = (dispatch) => {
+//   bindActionCreators(CartActions, dispatch);
+// };
 
 export default connect()(Home);
