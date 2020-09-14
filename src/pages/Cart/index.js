@@ -12,13 +12,13 @@ import * as CartActions from '../../store/modules/cart/action';
 
 import './styles.css';
 
-function Cart({ cart, dispatch, updateAmount, total }) {
+function Cart({ cart, dispatch, updateAmountRequest, total }) {
   function increment(product) {
-    dispatch(CartActions.updateAmount(product.id, product.amount + 1));
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount + 1));
   }
 
   function decrement(product) {
-    dispatch(CartActions.updateAmount(product.id, product.amount - 1));
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount - 1));
   }
 
   return (
